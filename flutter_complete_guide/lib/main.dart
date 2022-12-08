@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,42 +19,37 @@ class MyApp extends StatefulWidget {
 
 class MyAppSate extends State<MyApp> {
   var _questionIndex = 0;
+  final _questions = const [
+    {
+      'questionText': 'Name',
+      "answers": ['Thulani', 'Litha', 'Kid']
+    },
+    {
+      "questionText": 'Surname',
+      'answers': ['Tshabalala', 'Hashe', "NA"]
+    },
+    {
+      "questionText": 'Email',
+      'answers': ['t@gmal', 'l@gmail', 'NA']
+    }
+  ];
 
   void _answerQuestion() {
-    setState(() {      
+    setState(() {
       _questionIndex = _questionIndex + 1;
-      if (_questionIndex == 3) {
-        _questionIndex = 0;
-      }
     });
-    print(_questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      "Name",
-      "Surname",
-      "Email",
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("Changing State"),
         ),
-        body: Column(
-          children: [
-            Question(questions[_questionIndex]),
-            ElevatedButton(
-              child: Text("Answer 1"),
-              onPressed: _answerQuestion,
-            ),
-            ElevatedButton(
-              child: Text("Answer 2"),
-              onPressed: _answerQuestion,
-            ),
-          ],
-        ),
+        body: _questionIndex > _questions.length
+            ? Quiz(_questions, _questionIndex, _answerQuestion)
+            : Result(),
       ),
     );
   }
