@@ -22,19 +22,41 @@ class MyAppSate extends State<MyApp> {
   final _questions = const [
     {
       'questionText': 'Name',
-      "answers": ['Thulani', 'Litha', 'Kid']
+      "answers": [
+        {'text': 'Thulani', 'detail': 'Mr'},
+        {'text': 'Litha', 'detail': 'Miss'},
+        {'text': 'Kid', 'detail': 'NA'}
+      ]
     },
     {
       "questionText": 'Surname',
-      'answers': ['Tshabalala', 'Hashe', "NA"]
+      'answers': [
+        {'text': 'Tshabalala', 'detail': '1997'},
+        {'text': 'Hashe', 'detail': '1995'},
+        {'text': "NA", 'detail': '>=13'}
+      ]
     },
     {
       "questionText": 'Email',
-      'answers': ['t@gmal', 'l@gmail', 'NA']
+      'answers': [
+        {'text': 't@gmal', 'detail': 'Gmail'},
+        {'text': 'l@gmail', 'detail': 'Gmail'},
+        {'text': 'NA', 'detail': 'NA'}
+      ]
     }
   ];
 
-  void _answerQuestion() {
+  String _information = '';
+
+  void _resetQuestion() {
+    setState(() {
+      _information = '';
+      _questionIndex = 0;
+    });
+  }
+
+  void _answerQuestion(String details) {
+    _information = _information + ' ' + details;    
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -47,9 +69,9 @@ class MyAppSate extends State<MyApp> {
         appBar: AppBar(
           title: Text("Changing State"),
         ),
-        body: _questionIndex > _questions.length
+        body: _questionIndex < _questions.length
             ? Quiz(_questions, _questionIndex, _answerQuestion)
-            : Result(),
+            : Result(_information, _resetQuestion),
       ),
     );
   }
