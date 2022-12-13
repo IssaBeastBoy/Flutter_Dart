@@ -42,11 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _addNewTransaction(String titleItem, double amountItem) {
+  void _addNewTransaction(
+      String titleItem, double amountItem, DateTime chosenDate) {
     final newTransItem = new Transactions(
         title: titleItem,
         amount: amountItem,
-        date: DateTime.now(),
+        date: chosenDate,
         id: DateTime.now().toString());
     setState(() {
       _userTransactions.add(newTransItem);
@@ -66,6 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((element) {
+        return element.id == id;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Column(
           children: [
             Chart(_currWeekTransactions.toList()),
-            TransactionList(_userTransactions),
+            TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),
         floatingActionButton: FloatingActionButton(
