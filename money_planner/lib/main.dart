@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../widgets/new_transactions.dart';
 import '../widgets/transaction_list.dart';
@@ -6,7 +7,12 @@ import '../model/transaction.dart';
 
 import '../widgets/chart.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -33,6 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
     //     id: "t1", title: "New Shoes", amount: 1200, date: DateTime.now()),
     // Transactions(id: "t1", title: "Weekly", amount: 250, date: DateTime.now())
   ];
+
+  bool _showChart = false;
 
   Iterable<Transactions> get _currWeekTransactions {
     return _userTransactions.where((element) {
@@ -77,19 +85,59 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final orientationType =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final appBar = AppBar(
+      title: Text('Money Tracker'),
+      actions: [
+        IconButton(
+            onPressed: () => _startAddNewTrans(context), icon: Icon(Icons.add))
+      ],
+    );
+    final transList = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+      child: TransactionList(_userTransactions, _deleteTransaction),
+    );
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Money Tracker'),
-          actions: [
-            IconButton(
-                onPressed: () => _startAddNewTrans(context),
-                icon: Icon(Icons.add))
-          ],
-        ),
+        appBar: appBar,
         body: Column(
           children: [
-            Chart(_currWeekTransactions.toList()),
-            TransactionList(_userTransactions, _deleteTransaction),
+            if (orientationType)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = !_showChart;
+                        });
+                      })
+                ],
+              ),
+            if (!orientationType)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.3,
+                child: Chart(_currWeekTransactions.toList()),
+              ),
+            if (!orientationType) transList,
+            if (orientationType)
+              _showChart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: Chart(_currWeekTransactions.toList()),
+                    )
+                  : transList,
           ],
         ),
         floatingActionButton: FloatingActionButton(
