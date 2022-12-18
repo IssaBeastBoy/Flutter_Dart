@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+// Screens
+import '../screens/filter.dart';
+
 class DrawerTab extends StatelessWidget {
-  Widget _buildDrawContent(String title, IconData icon) {
+  Widget buildDrawContent(
+      String title, IconData icon, VoidCallback clickHandler) {
     return ListTile(
       leading: Icon(
         icon,
@@ -15,6 +19,7 @@ class DrawerTab extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      onTap: clickHandler,
     );
   }
 
@@ -40,8 +45,12 @@ class DrawerTab extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        _buildDrawContent("Meal", Icons.restaurant),
-        _buildDrawContent("Filters", Icons.filter),
+        buildDrawContent("Meal", Icons.restaurant, () {
+          Navigator.of(context).pushNamed('/');
+        }),
+        buildDrawContent("Filters", Icons.filter, () {
+          Navigator.of(context).pushNamed(Filters.routeName);
+        }),
       ],
     ));
   }

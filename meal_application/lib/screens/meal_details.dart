@@ -5,6 +5,10 @@ import '../data/dummy_data.dart';
 
 class MealDetail extends StatelessWidget {
   static const routeName = './mealDetails';
+  final Function setFavorite;
+  final Function isFavorite;
+
+  MealDetail(this.setFavorite, this.isFavorite);
 
   Widget _buildSectionTitle(BuildContext contexr, String text) {
     return Container(
@@ -94,6 +98,10 @@ class MealDetail extends StatelessWidget {
               _buildSectionBody(context, selectedMeal, 'steps'),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(isFavorite(mealId) ? Icons.star : Icons.star_border),
+          onPressed: () => setFavorite(mealId),
         ));
   }
 }
