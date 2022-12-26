@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // Provider
 import '../providers/cart.dart' show Cart;
+import '../providers/order.dart';
 
 // Wdigets
 import '../widget/cartItem.dart';
@@ -37,7 +38,13 @@ class CartScreen extends StatelessWidget {
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                 ),
-                ElevatedButton(child: Text('Order'), onPressed: (() {}))
+                ElevatedButton(
+                    child: Text('Order'),
+                    onPressed: (() {
+                      Provider.of<Orders>(context, listen: false)
+                          .addOrder(cart.items.values.toList(), cart.total);
+                      cart.clear();
+                    }))
               ],
             ),
           ),

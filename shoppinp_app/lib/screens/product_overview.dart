@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 // Widget
 import '../widget/badge.dart';
 import '../widget/product_gridview.dart';
+import '../widget/drawer.dart';
 
 // Provider
 import '../providers/cart.dart';
@@ -65,6 +66,7 @@ class _ProductOverViewState extends State<ProductOverView> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductGridView(_showFavorites),
     );
   }
