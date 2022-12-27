@@ -6,6 +6,8 @@ import './screens/product_overview.dart';
 import './screens/productdetail.dart';
 import './screens/cart.dart';
 import './screens/orders.dart';
+import './screens/user_products.dart';
+import './screens/product_setting.dart';
 
 // Providers
 import './providers/products_provider.dart';
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
           ProductDetail.routeName: ((ctx) => ProductDetail()),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrderScreen.routeName: (ctx) => OrderScreen(),
+          UserProducts.routeName: (ctx) => UserProducts(),
+          ProductSetting.routeName: (ctx) => ProductSetting(),
         },
       ),
     );
