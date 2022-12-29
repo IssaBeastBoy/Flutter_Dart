@@ -7,6 +7,7 @@ import '../providers/order.dart';
 
 // Wdigets
 import '../widget/cartItem.dart';
+import '../widget/orderButton.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -38,14 +39,8 @@ class CartScreen extends StatelessWidget {
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                 ),
-                ElevatedButton(
-                    child: Text('Order'),
-                    onPressed: (() {
-                      Provider.of<Orders>(context, listen: false)
-                          .addOrder(cart.items.values.toList(), cart.total);
-                      cart.clear();
-                    }))
-              ],
+                OrderButton(cart:cart),]
+                
             ),
           ),
         ),

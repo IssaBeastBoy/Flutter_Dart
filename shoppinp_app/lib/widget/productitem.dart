@@ -7,6 +7,7 @@ import '../screens/productdetail.dart';
 // Provider
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/products_provider.dart';
 
 class ProductItem extends StatelessWidget {
   // final String id;
@@ -17,7 +18,9 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productInfo = Provider.of<Product>(context);
+    final productInfo = Provider.of<Product>(context, listen: false);
+    final snackbar = ScaffoldMessenger.of(context);
+    final products = Provider.of<Products>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
@@ -33,14 +36,24 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         footer: GridTileBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black45,
           leading: IconButton(
             icon: Icon(productInfo.isFavorite
                 ? Icons.favorite
                 : Icons.favorite_border),
             color: Theme.of(context).accentColor,
-            onPressed: () {
-              productInfo.toggleFavoriteStatus();
+            onPressed: () async {
+              try {
+                await products.setFavorite(
+                    productInfo.id, !productInfo.isFavorite);
+                //productInfo.toggleFavoriteStatus();
+              } catch (error) {
+                snackbar.showSnackBar(SnackBar(
+                    content: Text(
+                  'Failed to set Favorite',
+                  textAlign: TextAlign.center,
+                )));
+              }
             },
           ),
           trailing: IconButton(
@@ -52,7 +65,7 @@ class ProductItem extends StatelessWidget {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  'Item add tp cart',
+                  'Item add to cart',
                   textAlign: TextAlign.center,
                 ),
                 duration: Duration(seconds: 1),
