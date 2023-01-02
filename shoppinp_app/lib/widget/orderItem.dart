@@ -38,7 +38,8 @@ class _OrderItemState extends State<OrderItem> {
                       : Icon(Icons.expand_more)),
             ),
             if (_expanded)
-              Container(
+              AnimatedContainer(
+                duration: Duration(milliseconds: 300),
                 padding: EdgeInsets.all(10),
                 height: min(widget.orderInfo.products.length * 20 + 100, 100),
                 child: ListView(
