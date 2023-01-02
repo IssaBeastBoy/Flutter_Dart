@@ -263,7 +263,8 @@ class _ProductSettingState extends State<ProductSetting> {
                                   }
                                   if (!value.toString().endsWith('.jpg') &&
                                       !value.toString().endsWith('.png') &&
-                                      !value.toString().endsWith('.jpeg')) {
+                                      !value.toString().endsWith('.jpeg') &&
+                                      !value.toString().endsWith('.webp')) {
                                     return 'Please correct image';
                                   }
                                   return null;

@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transactions> _userTransactions = [
     // Transactions(
     //     id: "t1", title: "New Shoes", amount: 1200, date: DateTime.now()),
@@ -41,6 +41,22 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   bool _showChart = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
+
+  @override
+  dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   Iterable<Transactions> get _currWeekTransactions {
     return _userTransactions.where((element) {
@@ -83,26 +99,29 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final orientationType =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final appBar = AppBar(
+  AppBar _buildAppBar() {
+    return AppBar(
       title: Text('Money Tracker'),
       actions: [
         IconButton(
             onPressed: () => _startAddNewTrans(context), icon: Icon(Icons.add))
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final orientationType =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final transList = Container(
       height: (MediaQuery.of(context).size.height -
-              appBar.preferredSize.height -
+              _buildAppBar().preferredSize.height -
               MediaQuery.of(context).padding.top) *
           0.7,
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
     return Scaffold(
-        appBar: appBar,
+        appBar: _buildAppBar(),
         body: Column(
           children: [
             if (orientationType)
@@ -122,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (!orientationType)
               Container(
                 height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
+                        _buildAppBar().preferredSize.height -
                         MediaQuery.of(context).padding.top) *
                     0.3,
                 child: Chart(_currWeekTransactions.toList()),
@@ -132,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _showChart
                   ? Container(
                       height: (MediaQuery.of(context).size.height -
-                              appBar.preferredSize.height -
+                              _buildAppBar().preferredSize.height -
                               MediaQuery.of(context).padding.top) *
                           0.7,
                       child: Chart(_currWeekTransactions.toList()),
