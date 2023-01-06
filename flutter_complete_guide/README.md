@@ -1,6 +1,6 @@
 # flutter_complete_guide
 
-A new Flutter project. Which just shows how state is changed in a fletter application via an event trigger.
+A new Flutter project. Which just shows how state is changed in a flutter application via an event trigger.
 
 
 ## Getting Started
